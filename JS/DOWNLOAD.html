@@ -16,12 +16,12 @@
       return false;
   };
   var downloadURL = getUrlParameter('fileURL');
-  var lastURL = document.referrer;
+  var currentURL = getUrlParameter('currentURL');
 
 window.location.assign(downloadURL);
 setTimeout(function (){
 
-  window.location.assign(lastURL);
+  window.location.assign(currentURL);
 
 }, 1000); // How long you want the delay to be, measured in milliseconds.
 
