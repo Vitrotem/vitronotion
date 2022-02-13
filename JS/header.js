@@ -1,5 +1,4 @@
-$( document ).load(function() {
-  	
+$( document ).ready(function() {
 
 	var currentURL = (window.location != window.parent.location)
             ? document.referrer
