@@ -15,13 +15,14 @@
       }
       return false;
   };
-var downloadURL = getUrlParameter('fileURL');
+  var downloadURL = getUrlParameter('fileURL');
+  var lastURL = document.referrer;
 
 window.location.assign(downloadURL);
-// setTimeout(function (){
-//
-//   window.close();
-//
-// }, 1000); // How long you want the delay to be, measured in milliseconds.
+setTimeout(function (){
+
+  window.location.assign(lastURL);
+
+}, 1000); // How long you want the delay to be, measured in milliseconds.
 
 </script>
