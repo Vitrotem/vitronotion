@@ -1,5 +1,14 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js", charset="UTF-8"></script>
 <script type="text/javascript">
+  function downloadURI(uri)
+  {
+      var link = document.createElement("a");
+    
+      link.href = uri;
+      link.click();
+  }
+
+
   var getUrlParameter = function getUrlParameter(sParam) {
       var sPageURL = window.location.search.substring(1),
           sURLVariables = sPageURL.split('&'),
@@ -15,14 +24,16 @@
       }
       return false;
   };
-  var downloadURL = getUrlParameter('fileURL');
+var downloadURL = getUrlParameter('fileURL');
   // var currentURL = getUrlParameter('currentURL');
 
-window.location.assign(downloadURL);
+// window.location.assign(downloadURL);
+downloadURI(downloadURL);
 setTimeout(function (){
 
   history.back()
 
 }, 1000); // How long you want the delay to be, measured in milliseconds.
+
 
 </script>
