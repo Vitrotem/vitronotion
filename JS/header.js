@@ -1,6 +1,6 @@
-$( document ).ready(function() {
+$( document ).load(function() {
   	
-	$( "iframe" ).setAttribute("id", "test");
+
 
 	var e = jQuery.Event("click");
 	e.ctrlKey = true;
