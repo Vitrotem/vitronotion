@@ -1,2 +1,3 @@
 # VitroNotion
- 
+
+This repo is for information display to embedded Notion pages...
