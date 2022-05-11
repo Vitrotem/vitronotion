@@ -1,0 +1,4 @@
+cd C:\Users\tomgr\Documents\GitHub\Vitropy
+pyinstaller --icon "C:/Users/tomgr/Documents/GitHub/Vitropy/GUI/resources/app_logo.ico" --splash "C:\Users\tomgr\Documents\GitHub\Vitropy\GUI\resources\LogoVitrotem.jpg" --paths=PYDUINO --paths=GUI --paths=GUI\frames_folder --onefile -y C:\Users\tomgr\Documents\GitHub\Vitropy\MVP_main.pyw
+pyinstaller --icon "C:/Users/tomgr/Documents/GitHub/Vitropy/GUI/resources/config_logo.ico" --splash "C:\Users\tomgr\Documents\GitHub\Vitropy\GUI\resources\LogoVitrotemConfig.jpg" --paths=PYDUINO --paths=GUI --onefile -y C:\Users\tomgr\Documents\GitHub\Vitropy\calibrate_motors.pyw
+pyinstaller --icon "C:/Users/tomgr/Documents/GitHub/Vitropy/GUI/resources/log_icon.ico" --splash "C:\Users\tomgr\Documents\GitHub\Vitropy\GUI\resources\LogoVitrotemLog.jpg"--onefile -y C:\Users\tomgr\Documents\GitHub\Vitropy\log_viewer.pyw
