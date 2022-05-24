@@ -34,7 +34,7 @@ class pynotion:
         self.pp = pprint.PrettyPrinter(indent=4)
 
         doc, tag, text = Doc().tagtext()
-        self.GIT_URL = "https://vitrotem.github.io/VitroNotion/"
+        self.GIT_URL = "https://vitrotem.github.io/vitronotion/"
         self.SUB_DIR = SUB_DIR
         # self.SUB_DIR = "MVP_02"
 
