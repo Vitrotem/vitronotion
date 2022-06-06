@@ -162,7 +162,7 @@ class pynotion:
         rows = df.to_numpy()
         BOM_properties = {}
         for i,h in enumerate(headings):
-            if h == "ITEM NO.": BOM_properties[h] = {"title": {}}
+            if h == "PartNo": BOM_properties[h] = {"title": {}}
             elif h == "DOCUMENT PREVIEW": BOM_properties[h] = {"files": {}}
             else: BOM_properties[h] = {"rich_text": {}}
         # for row in rows:
@@ -185,13 +185,12 @@ class pynotion:
         df = df.fillna("")
         for i,r in df.iterrows():
             page_data = {}
-            img_url = os.path.join(self.GIT_URL, 'MVP_02', 'BOM', 'IMG',r["PartNo"]+".jpg")
-
+            img_url = self.GIT_URL+"/MVP_02/BOM/IMG/"+r["PartNo"]+".jpg"
             for j,h in enumerate(headings):
                 # img_url = ''
-                if h == "ITEM NO.":
+                if h == "PartNo":
                     page_data[h] = {"title": [{"text":{"content":str(df.iloc[i][h])}}]}
-                elif h == "DOCUMENT PREVIEW": page_data[h] =  {"files": [{"name":img_url, "external":{"url": str(img_url)}}]}
+                elif h == "DOCUMENT PREVIEW": page_data[h] =  {"files": [{"name":img_url, "type":"external","external":{"url": str(img_url)}}]}
                 else: page_data[h] = {"rich_text": [{"text":{"content":str(df.iloc[i][h])}}]}
             # page_data.replace("\'","\"").replace("\n","")
             # self.pp.pprint(page_data)
