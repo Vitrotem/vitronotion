@@ -34,9 +34,12 @@ class pynotion:
     def __init__(self):
         self.pp = pprint.PrettyPrinter(indent=4)
 
-        url = "https://api.notion.com/v1/databases/9c434ee2c6064066aecc71aa624c2827/query"
+        url = "https://api.notion.com/v1/databases"
 
-        payload = {"page_size": 100}
+        payload = {
+            "parent": "test-05e0f0969ab4403d8ce5ff361eb27b8b",
+
+        }
         headers = {
             "Accept": "application/json",
             "Notion-Version": "2022-02-22",
@@ -44,36 +47,27 @@ class pynotion:
             "Authorization": "Bearer secret_jPLqKNJD68cdmhlSRKKDTDt7Yr0wzaqZUiDd4pbT650"
         }
 
+
+        data = """
+        'COMMAND': {   'id': 'title',
+            'title': [   {   'annotations': {   'bold': False,
+                                                'code': False,
+                                                'color': 'default',
+                                                'italic': False,
+                                                'strikethrough': False,
+                                                'underline': False},
+                             'href': None,
+                             'plain_text': $VALUE,
+                             'text': {   'content': 'moving',
+                                         'link': None},
+                             'type': 'text'}],
+            'type': 'title'}
+        """
+
+        payload["properties"] = data
         response = requests.post(url, json=payload, headers=headers)
-        response = json.loads(response.text)
 
-        # print()
-        properties_list = []
-        properties_dict = {}
-        for k,v in response['results'][0]['properties'].items():
-            properties_list.append(k)
-            properties_dict[k]=''
-        df = pd.DataFrame(columns=properties_list)
-
-        for i, v in enumerate(response['results']):
-            for k1,v1 in v["properties"].items():
-                # property = k1
-                # print(v1['type'])
-                value = ''
-                if v1['type'] in ["rich_text","title"] and len(v1[v1['type']])!=0:
-                    value=v1[v1['type']][0]['plain_text']
-                    properties_dict[k1] = value
-
-                elif v1['type'] in ["select"] and v1[v1['type']]!=None:
-                    value=v1[v1['type']]['name']
-                    properties_dict[k1] = value
-
-            df = df.append(properties_dict, ignore_index=True)
-
-
-        print(df)
-        # self.pp.pprint(response['results'][0]['properties'])
-
+        print(response.text)        # self.pp.pprint(response['results'][0]['properties'])
 
 if __name__ == "__main__":
     # df = pd.read_csv("directories.csv",delimiter=";")
