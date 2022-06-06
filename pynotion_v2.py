@@ -34,7 +34,7 @@ class pynotion:
     def __init__(self):
         self.pp = pprint.PrettyPrinter(indent=4)
 
-        url = "https://api.notion.com/v1/databases/9c434ee2c6064066aecc71aa624c2827/query"
+        url = "https://api.notion.com/v1/databases/2d719565bce14d26b7209d3bb1f8f2c7/query"
 
         payload = {"page_size": 100}
         headers = {
@@ -67,6 +67,9 @@ class pynotion:
                 elif v1['type'] in ["select"] and v1[v1['type']]!=None:
                     value=v1[v1['type']]['name']
                     properties_dict[k1] = value
+
+                else :
+                    print(v1)
 
             df = df.append(properties_dict, ignore_index=True)
 

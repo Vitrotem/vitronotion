@@ -162,7 +162,8 @@ class pynotion:
         rows = df.to_numpy()
         BOM_properties = {}
         for i,h in enumerate(headings):
-            if i == 0: BOM_properties[h] = {"title": {}}
+            if h == "ItemNo": BOM_properties[h] = {"title": {}}
+            elif h == "DOCUMENT PREVIEW": BOM_properties[h] = {"title": {}}
             else: BOM_properties[h] = {"rich_text": {}}
         # for row in rows:
         #     i = 1
@@ -184,13 +185,13 @@ class pynotion:
         for i,r in df.iterrows():
             page_data = {}
             for j,h in enumerate(headings):
-                if i == 0: page_data[h] = {"title": [{"text":{"content":str(df.iloc[i][h])}}]}
+                if h == "ItemNo": page_data[h] = {"title": [{"text":{"content":str(df.iloc[i][h])}}]}
                 else: page_data[h] = {"rich_text": [{"text":{"content":str(df.iloc[i][h])}}]}
 
             # page_data.replace("\'","\"").replace("\n","")
             # self.pp.pprint(page_data)
             print(pyn_c.add_db_page(db_id, page_data))
-            sleep(2)
+            sleep(.3)
 
         # return BOM_properties
     #
