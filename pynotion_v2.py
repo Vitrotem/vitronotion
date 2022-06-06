@@ -49,10 +49,14 @@ class pynotion:
 
         # print()
         properties_list = []
-        for k,v in response['results'][0]['properties'].items()
+        for k,v in response['results'][0]['properties'].items():
+
             properties_list.append(k)
-            
-        self.pp.pprint(response['results'][0]['properties'])
+
+        df = pd.DataFrame(columns=properties_list)
+        print(df)
+        # self.pp.pprint(response['results'][0]['properties'])
+
 
 if __name__ == "__main__":
     # df = pd.read_csv("directories.csv",delimiter=";")
