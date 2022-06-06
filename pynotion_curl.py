@@ -22,106 +22,97 @@ import requests
 import json
 
 
-class pynotion_curl:
+def create_db(db_properties):
+    pp = pprint.PrettyPrinter(indent=4)
+    url = "https://api.notion.com/v1/databases"
 
-    def __init__(self):
-        self.pp = pprint.PrettyPrinter(indent=4)
-        url = "https://api.notion.com/v1/databases"
+    headers = {
+        "Accept": "application/json",
+        "Notion-Version": "2022-02-22",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer secret_jPLqKNJD68cdmhlSRKKDTDt7Yr0wzaqZUiDd4pbT650"
+    }
 
-        headers = {
-            "Accept": "application/json",
-            "Notion-Version": "2022-02-22",
-            "Content-Type": "application/json",
-            "Authorization": "Bearer secret_jPLqKNJD68cdmhlSRKKDTDt7Yr0wzaqZUiDd4pbT650"
-        }
-
-        data = """
-        {
-            "parent": {
-                "type": "page_id",
-                "page_id": "05e0f0969ab4403d8ce5ff361eb27b8b"
-            },
-            "icon": {
-            	"type": "emoji",
-        			"emoji": "🎉"
-          	},
-          	"cover": {
-          		"type": "external",
-            	"external": {
-            		"url": "https://website.domain/images/image.png"
-            	}
-          	},
-            "title": [
-                {
-                    "type": "text",
-                    "text": {
-                        "content": "MVP1",
-                        "link": null
-                    }
-                }
-            ],
-            "properties": {
-                "ItemNo": {
-                    "title": {}
-                },
-                "PartNo": {
-                    "rich_text": {}
-                },
-                "Description": {
-                    "rich_text": {}
+    data = """
+    {
+        "parent": {
+            "type": "page_id",
+            "page_id": "05e0f0969ab4403d8ce5ff361eb27b8b"
+        },
+        "icon": {
+        	"type": "emoji",
+    			"emoji": "🎉"
+      	},
+      	"cover": {
+      		"type": "external",
+        	"external": {
+        		"url": "https://website.domain/images/image.png"
+        	}
+      	},
+        "title": [
+            {
+                "type": "text",
+                "text": {
+                    "content": "MVP1",
+                    "link": null
                 }
             }
-        }
-        """
-        data = data.replace("\'","\"").replace("\n","")
+        ],
+        "properties": {}
+    }
+    """
+    data = data.replace("\'","\"").replace("\n","")
 
-        # payload["properties"] = json.loads(data)
-        payload = json.loads(data)
-        response = requests.post(url, json=payload, headers=headers)
+    # payload["properties"] = json.loads(data)
+    payload = json.loads(data)
+    payload["properties"] = db_properties
+    response = requests.post(url, json=payload, headers=headers)
+    return json.loads(response.text)
 
-        db_id = json.loads(response.text)["id"]
-        url = "https://api.notion.com/v1/pages"
+def fill_db(db_id, db_data):
 
-        data = """
-        {
-        "parent": { "database_id": \""""+db_id+"""\" },
-        "properties": {
-        	"ItemNo": {
-        		"title": [
-        			{
-        				"text": {
-        					"content": "123"
-        				}
-        			}
-        		]
-        	},
-        	"PartNo": {
-        		"rich_text": [
-        			{
-        				"text": {
-        					"content": "A dark green leafy vegetable"
-        				}
-        			}
-        		]
-        	},
-        	"Description": {
-        		"rich_text": [
-        			{
-        				"text": {
-        					"content": "A dark green leafy vegetable"
-        				}
-        			}
-        		]
-        	}
-        }
-        }
-        """
-        payload = json.loads(data)
-        response = requests.post(url, json=payload, headers=headers)
-        print(json.loads(response.text))        # self.pp.pprint(response['results'][0]['properties'])
+    url = "https://api.notion.com/v1/pages"
+
+    data = """
+    {
+    "parent": { "database_id": \""""+db_id+"""\" },
+    "properties": {
+    	"ItemNo": {
+    		"title": [
+    			{
+    				"text": {
+    					"content": "123"
+    				}
+    			}
+    		]
+    	},
+    	"PartNo": {
+    		"rich_text": [
+    			{
+    				"text": {
+    					"content": "A dark green leafy vegetable"
+    				}
+    			}
+    		]
+    	},
+    	"Description": {
+    		"rich_text": [
+    			{
+    				"text": {
+    					"content": "A dark green leafy vegetable"
+    				}
+    			}
+    		]
+    	}
+    }
+    }
+    """
+    payload = json.loads(data)
+    response = requests.post(url, json=payload, headers=headers)
+    print(json.loads(response.text))        # self.pp.pprint(response['results'][0]['properties'])
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # df = pd.read_csv("directories.csv",delimiter=";")
     # threads = {}
     # for i,r in df.iterrows():
@@ -130,5 +121,5 @@ if __name__ == "__main__":
     #     threads[i] = t
     #     threads[i].start()
     #     sleep(10)
-    pyn = pynotion_curl()
+    # pyn = pynotion_curl()
     # py = pynotion()

@@ -89,7 +89,9 @@ class pynotion:
             # self.copy_directories()
             df = self.GET_BOM()
 
+            response = self.create_BOM_db(df)
 
+            self.update_BOM_db(df, response["id"])
 
             # self.bom_html_str = self.ydump_BOM(df)
             # self.orders_html_str = self.ydump_ORDERS(df)
@@ -109,11 +111,11 @@ class pynotion:
         if not isExist:
           os.mkdir(path)
 
-    def copy_directories(self):
-        shutil.copytree(self.DIR_STP, self.DIR_GIT_STP, dirs_exist_ok=True)
-        shutil.copytree(self.DIR_PDF, self.DIR_GIT_PDF, dirs_exist_ok=True)
-        shutil.copytree(self.DIR_ORDERS, self.DIR_GIT_ORDERS, dirs_exist_ok=True)
-        shutil.copytree(self.DIR_SHOPPING_LIST, self.DIR_GIT_SHOPPING_LIST, dirs_exist_ok=True)
+    # def copy_directories(self):
+    #     shutil.copytree(self.DIR_STP, self.DIR_GIT_STP, dirs_exist_ok=True)
+    #     shutil.copytree(self.DIR_PDF, self.DIR_GIT_PDF, dirs_exist_ok=True)
+    #     shutil.copytree(self.DIR_ORDERS, self.DIR_GIT_ORDERS, dirs_exist_ok=True)
+    #     shutil.copytree(self.DIR_SHOPPING_LIST, self.DIR_GIT_SHOPPING_LIST, dirs_exist_ok=True)
 
     def GET_BOM(self):
         highest_v = 0
@@ -135,50 +137,66 @@ class pynotion:
         return BOM
 
     # def ydump_table(self,headings, rows, **kwargs):
-    #     """Dump an html table using yatag
-    #
-    #     Args:
-    #         doc: yatag Doc instance
-    #         headings: [str]
-    #         rows: [[str]]
-    #
-    #     """
-    #     doc, tag, text, line = Doc().ttl()
-    #     with tag('table', **kwargs):
-    #         with tag('tr'):
-    #             for x in headings:
-    #                 line('th', str(x))
-    #         for row in rows:
-    #             with tag('tr'):
-    #                 for x in row:
-    #                     line('td', str(x))
-    #     return doc.getvalue()
-    #
-    # def ydump_BOM(self,df, **kwargs):
-    #     # df = df.drop('column_name', 1)
-    #     headings = df.columns.values
-    #     rows = df.to_numpy()
-    #
-    #     doc, tag, text, line = Doc().ttl()
-    #     with tag('table', klass="styled_table", **kwargs):
-    #         with tag('tr'):
-    #             for x in headings:
-    #                 line('th', str(x))
-    #         for row in rows:
-    #             with tag('tr'):
-    #                 i = 1
-    #                 for x in row:
-    #                     if i==1:
-    #                         with tag('td'):
-    #                             with tag('img',src=("IMG/"+row[2]+".jpg"), klass="bom_image"):
-    #                                 text('')
-    #
-    #                     else:
-    #                         line('td', str(x), klass="bom_table")
-    #
-    #                     i+=1
-    #
-    #     return doc.getvalue()
+        """Dump an html table using yatag
+
+        Args:
+            doc: yatag Doc instance
+            headings: [str]
+            rows: [[str]]
+
+        """
+        doc, tag, text, line = Doc().ttl()
+        with tag('table', **kwargs):
+            with tag('tr'):
+                for x in headings:
+                    line('th', str(x))
+            for row in rows:
+                with tag('tr'):
+                    for x in row:
+                        line('td', str(x))
+        return doc.getvalue()
+
+    def create_BOM_db(self,df, **kwargs):
+        # df = df.drop('column_name', 1)
+        headings = df.columns.values
+        rows = df.to_numpy()
+        BOM_properties = {}
+        for i,h in enumerate(headings):
+            if i == 0: BOM_properties[h] = {"title": {}}
+            else: BOM_properties[h] = {"rich_text": {}}
+        # for row in rows:
+        #     i = 1
+        #     for x in row:
+        #         if i==1:
+        #             'img',src=("IMG/"+row[2]+".jpg")
+        #                 text('')
+        #         else:
+        #             line('td', str(x), klass="bom_table")
+        #
+        #         i+=1
+        response = pyn_c.create_db(BOM_properties)
+        return response
+
+    def update_BOM_db(self,df, db_id=None):
+        # df = df.drop('column_name', 1)
+        headings = df.columns.values
+        rows = df.to_numpy()
+        BOM_data = {}
+        for i,h in enumerate(headings):
+            if i == 0: BOM_properties[h] = {"title": {}}
+            else: BOM_properties[h] = {"rich_text": {}}
+        # for row in rows:
+        #     i = 1
+        #     for x in row:
+        #         if i==1:
+        #             'img',src=("IMG/"+row[2]+".jpg")
+        #                 text('')
+        #         else:
+        #             line('td', str(x), klass="bom_table")
+        #
+        #         i+=1
+        pyn_c.create_db(BOM_properties)
+        # return BOM_properties
     #
     # def writeHTML(self,title,body):
     #     now = datetime.now()
@@ -494,7 +512,7 @@ if __name__ == "__main__":
         # print(r["LOCAL_DIR"])
         t = threading.Thread(target=pynotion, args=(r["LOCAL_DIR"],r["GIT_DIR"]))
         threads[i] = t
-        threads[i].start()
-        sleep(10)
+    threads[0].start()
+    sleep(10)
 
     # py = pynotion()
