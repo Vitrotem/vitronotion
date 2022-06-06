@@ -50,11 +50,25 @@ class pynotion:
         # print()
         properties_list = []
         for k,v in response['results'][0]['properties'].items():
-
             properties_list.append(k)
 
+        for i, v in enumerate(response['results']):
+            for k1,v1 in v["properties"].items():
+                property = k1
+                # print(v1['type'])
+
+                if v1['type'] in ["rich_text","title"] and len(v1[v1['type']])!=0:
+                    print(v1[v1['type']][0]['plain_text'])
+                    # value = v1[v1['type']][0]['plain_text']
+                    # print(property)
+                    # print(value)
+
+        for k in response['results'][0]['properties'].items():
+            properties_list.append(k)
+
+
         df = pd.DataFrame(columns=properties_list)
-        print(df)
+        # print(df)
         # self.pp.pprint(response['results'][0]['properties'])
 
 
