@@ -85,14 +85,17 @@ class pynotion:
                 {
                     "type": "text",
                     "text": {
-                        "content": "Grocery List",
+                        "content": "MVP1",
                         "link": null
                     }
                 }
             ],
             "properties": {
-                "Name": {
+                "ItemNo": {
                     "title": {}
+                },
+                "PartNo": {
+                    "rich_text": {}
                 },
                 "Description": {
                     "rich_text": {}
