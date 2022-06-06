@@ -37,7 +37,7 @@ class pynotion:
         url = "https://api.notion.com/v1/databases"
 
         payload = {
-            "parent": "test-05e0f0969ab4403d8ce5ff361eb27b8b",
+            "parent": {'page_id':"05e0f0969ab4403d8ce5ff361eb27b8b"},
 
         }
         headers = {
@@ -48,23 +48,62 @@ class pynotion:
         }
 
 
+        # data = """
+        # {
+        # 'COMMAND': {   'id': 'title',
+        #     'title': [   {   'annotations': {   'bold': false,
+        #                                         'code': false,
+        #                                         'color': 'default',
+        #                                         'italic': false,
+        #                                         'strikethrough': false,
+        #                                         'underline': false},
+        #                      'href': null,
+        #                      'plain_text': '$VALUE',
+        #                      'text': {   'content': '$VALUE',
+        #                                  'link': null},
+        #                      'type': 'text'}],
+        #     'type': 'title'}
+        #     }
+        # """
         data = """
-        'COMMAND': {   'id': 'title',
-            'title': [   {   'annotations': {   'bold': False,
-                                                'code': False,
-                                                'color': 'default',
-                                                'italic': False,
-                                                'strikethrough': False,
-                                                'underline': False},
-                             'href': None,
-                             'plain_text': $VALUE,
-                             'text': {   'content': 'moving',
-                                         'link': None},
-                             'type': 'text'}],
-            'type': 'title'}
+        {
+            "parent": {
+                "type": "page_id",
+                "page_id": "05e0f0969ab4403d8ce5ff361eb27b8b"
+            },
+            "icon": {
+            	"type": "emoji",
+        			"emoji": "🎉"
+          	},
+          	"cover": {
+          		"type": "external",
+            	"external": {
+            		"url": "https://website.domain/images/image.png"
+            	}
+          	},
+            "title": [
+                {
+                    "type": "text",
+                    "text": {
+                        "content": "Grocery List",
+                        "link": null
+                    }
+                }
+            ],
+            "properties": {
+                "Name": {
+                    "title": {}
+                },
+                "Description": {
+                    "rich_text": {}
+                }
+            }
+        }
         """
+        data = data.replace("\'","\"").replace("\n","")
 
-        payload["properties"] = data
+        # payload["properties"] = json.loads(data)
+        payload = json.loads(data)
         response = requests.post(url, json=payload, headers=headers)
 
         print(response.text)        # self.pp.pprint(response['results'][0]['properties'])
