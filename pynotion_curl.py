@@ -69,47 +69,29 @@ def create_db(db_properties):
     response = requests.post(url, json=payload, headers=headers)
     return json.loads(response.text)
 
-def fill_db(db_id, db_data):
+def add_db_page(db_id, page_data):
+    pp = pprint.PrettyPrinter(indent=4)
 
     url = "https://api.notion.com/v1/pages"
+    headers = {
+        "Accept": "application/json",
+        "Notion-Version": "2022-02-22",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer secret_jPLqKNJD68cdmhlSRKKDTDt7Yr0wzaqZUiDd4pbT650"
+    }
 
     data = """
     {
     "parent": { "database_id": \""""+db_id+"""\" },
-    "properties": {
-    	"ItemNo": {
-    		"title": [
-    			{
-    				"text": {
-    					"content": "123"
-    				}
-    			}
-    		]
-    	},
-    	"PartNo": {
-    		"rich_text": [
-    			{
-    				"text": {
-    					"content": "A dark green leafy vegetable"
-    				}
-    			}
-    		]
-    	},
-    	"Description": {
-    		"rich_text": [
-    			{
-    				"text": {
-    					"content": "A dark green leafy vegetable"
-    				}
-    			}
-    		]
-    	}
-    }
+    "properties": {}
     }
     """
+    # pp.pprint(json.loads(page_data))
     payload = json.loads(data)
+    payload["properties"] = page_data
+
     response = requests.post(url, json=payload, headers=headers)
-    print(json.loads(response.text))        # self.pp.pprint(response['results'][0]['properties'])
+    return json.loads(response.text)       # self.pp.pprint(response['results'][0]['properties'])
 
 
 # if __name__ == "__main__":

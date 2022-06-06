@@ -91,7 +91,7 @@ class pynotion:
 
             response = self.create_BOM_db(df)
 
-            self.update_BOM_db(df, response["id"])
+            self.add_db_page(df, response["id"])
 
             # self.bom_html_str = self.ydump_BOM(df)
             # self.orders_html_str = self.ydump_ORDERS(df)
@@ -177,25 +177,21 @@ class pynotion:
         response = pyn_c.create_db(BOM_properties)
         return response
 
-    def update_BOM_db(self,df, db_id=None):
+    def add_db_page(self,df, db_id=None):
         # df = df.drop('column_name', 1)
         headings = df.columns.values
-        rows = df.to_numpy()
-        BOM_data = {}
-        for i,h in enumerate(headings):
-            if i == 0: BOM_properties[h] = {"title": {}}
-            else: BOM_properties[h] = {"rich_text": {}}
-        # for row in rows:
-        #     i = 1
-        #     for x in row:
-        #         if i==1:
-        #             'img',src=("IMG/"+row[2]+".jpg")
-        #                 text('')
-        #         else:
-        #             line('td', str(x), klass="bom_table")
-        #
-        #         i+=1
-        pyn_c.create_db(BOM_properties)
+        df = df.fillna("")
+        for i,r in df.iterrows():
+            page_data = {}
+            for j,h in enumerate(headings):
+                if i == 0: page_data[h] = {"title": [{"text":{"content":str(df.iloc[i][h])}}]}
+                else: page_data[h] = {"rich_text": [{"text":{"content":str(df.iloc[i][h])}}]}
+
+            # page_data.replace("\'","\"").replace("\n","")
+            # self.pp.pprint(page_data)
+            print(pyn_c.add_db_page(db_id, page_data))
+            sleep(2)
+
         # return BOM_properties
     #
     # def writeHTML(self,title,body):
