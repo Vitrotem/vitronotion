@@ -21,25 +21,13 @@ from time import sleep
 import requests
 import json
 
-def git_push(repo):
-    ran = ''.join(random.choices(string.ascii_uppercase + string.digits, k = 10))
-    repo = Repo(repo)
-    repo.git.add(all=True)
-    repo.index.commit(ran)
-    origin = repo.remote(name='origin')
-    origin.push()
 
-class pynotion:
+class pynotion_curl:
 
     def __init__(self):
         self.pp = pprint.PrettyPrinter(indent=4)
-
         url = "https://api.notion.com/v1/databases"
 
-        payload = {
-            "parent": {'page_id':"05e0f0969ab4403d8ce5ff361eb27b8b"},
-
-        }
         headers = {
             "Accept": "application/json",
             "Notion-Version": "2022-02-22",
@@ -47,24 +35,6 @@ class pynotion:
             "Authorization": "Bearer secret_jPLqKNJD68cdmhlSRKKDTDt7Yr0wzaqZUiDd4pbT650"
         }
 
-
-        # data = """
-        # {
-        # 'COMMAND': {   'id': 'title',
-        #     'title': [   {   'annotations': {   'bold': false,
-        #                                         'code': false,
-        #                                         'color': 'default',
-        #                                         'italic': false,
-        #                                         'strikethrough': false,
-        #                                         'underline': false},
-        #                      'href': null,
-        #                      'plain_text': '$VALUE',
-        #                      'text': {   'content': '$VALUE',
-        #                                  'link': null},
-        #                      'type': 'text'}],
-        #     'type': 'title'}
-        #     }
-        # """
         data = """
         {
             "parent": {
@@ -109,7 +79,47 @@ class pynotion:
         payload = json.loads(data)
         response = requests.post(url, json=payload, headers=headers)
 
-        print(response.text)        # self.pp.pprint(response['results'][0]['properties'])
+        db_id = json.loads(response.text)["id"]
+        url = "https://api.notion.com/v1/pages"
+
+        data = """
+        {
+        "parent": { "database_id": \""""+db_id+"""\" },
+        "properties": {
+        	"ItemNo": {
+        		"title": [
+        			{
+        				"text": {
+        					"content": "123"
+        				}
+        			}
+        		]
+        	},
+        	"PartNo": {
+        		"rich_text": [
+        			{
+        				"text": {
+        					"content": "A dark green leafy vegetable"
+        				}
+        			}
+        		]
+        	},
+        	"Description": {
+        		"rich_text": [
+        			{
+        				"text": {
+        					"content": "A dark green leafy vegetable"
+        				}
+        			}
+        		]
+        	}
+        }
+        }
+        """
+        payload = json.loads(data)
+        response = requests.post(url, json=payload, headers=headers)
+        print(json.loads(response.text))        # self.pp.pprint(response['results'][0]['properties'])
+
 
 if __name__ == "__main__":
     # df = pd.read_csv("directories.csv",delimiter=";")
@@ -120,5 +130,5 @@ if __name__ == "__main__":
     #     threads[i] = t
     #     threads[i].start()
     #     sleep(10)
-    pyn = pynotion()
+    pyn = pynotion_curl()
     # py = pynotion()
