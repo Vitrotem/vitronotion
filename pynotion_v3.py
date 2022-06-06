@@ -162,8 +162,8 @@ class pynotion:
         rows = df.to_numpy()
         BOM_properties = {}
         for i,h in enumerate(headings):
-            if h == "ItemNo": BOM_properties[h] = {"title": {}}
-            elif h == "DOCUMENT PREVIEW": BOM_properties[h] = {"title": {}}
+            if h == "ITEM NO.": BOM_properties[h] = {"title": {}}
+            elif h == "DOCUMENT PREVIEW": BOM_properties[h] = {"files": {}}
             else: BOM_properties[h] = {"rich_text": {}}
         # for row in rows:
         #     i = 1
@@ -176,6 +176,7 @@ class pynotion:
         #
         #         i+=1
         response = pyn_c.create_db(BOM_properties)
+        print(response)
         return response
 
     def add_db_page(self,df, db_id=None):
@@ -184,10 +185,14 @@ class pynotion:
         df = df.fillna("")
         for i,r in df.iterrows():
             page_data = {}
-            for j,h in enumerate(headings):
-                if h == "ItemNo": page_data[h] = {"title": [{"text":{"content":str(df.iloc[i][h])}}]}
-                else: page_data[h] = {"rich_text": [{"text":{"content":str(df.iloc[i][h])}}]}
+            img_url = os.path.join(self.GIT_URL, 'MVP_02', 'BOM', 'IMG',r["PartNo"]+".jpg")
 
+            for j,h in enumerate(headings):
+                # img_url = ''
+                if h == "ITEM NO.":
+                    page_data[h] = {"title": [{"text":{"content":str(df.iloc[i][h])}}]}
+                elif h == "DOCUMENT PREVIEW": page_data[h] =  {"files": [{"name":img_url, "external":{"url": str(img_url)}}]}
+                else: page_data[h] = {"rich_text": [{"text":{"content":str(df.iloc[i][h])}}]}
             # page_data.replace("\'","\"").replace("\n","")
             # self.pp.pprint(page_data)
             print(pyn_c.add_db_page(db_id, page_data))

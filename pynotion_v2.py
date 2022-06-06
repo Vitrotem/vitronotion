@@ -69,7 +69,8 @@ class pynotion:
                     properties_dict[k1] = value
 
                 else :
-                    print(v1)
+                    if(len(v1["files"])!=0):
+                        print(v1)
 
             df = df.append(properties_dict, ignore_index=True)
 
