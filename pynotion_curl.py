@@ -21,17 +21,18 @@ from time import sleep
 import requests
 import json
 
+headers = {
+    "Accept": "application/json",
+    "Notion-Version": "2022-02-22",
+    "Content-Type": "application/json",
+    "Authorization": "Bearer secret_jPLqKNJD68cdmhlSRKKDTDt7Yr0wzaqZUiDd4pbT650"
+}
 
-def create_db(db_properties):
+def curl_db(db_properties,title,icon):
     pp = pprint.PrettyPrinter(indent=4)
     url = "https://api.notion.com/v1/databases"
 
-    headers = {
-        "Accept": "application/json",
-        "Notion-Version": "2022-02-22",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer secret_jPLqKNJD68cdmhlSRKKDTDt7Yr0wzaqZUiDd4pbT650"
-    }
+    global headers
 
     data = """
     {
@@ -41,19 +42,13 @@ def create_db(db_properties):
         },
         "icon": {
         	"type": "emoji",
-    			"emoji": "🎉"
-      	},
-      	"cover": {
-      		"type": "external",
-        	"external": {
-        		"url": "https://website.domain/images/image.png"
-        	}
+    			"emoji": "$ICON$"
       	},
         "title": [
             {
                 "type": "text",
                 "text": {
-                    "content": "MVP1",
+                    "content": "$TITLE$",
                     "link": null
                 }
             }
@@ -62,6 +57,7 @@ def create_db(db_properties):
     }
     """
     data = data.replace("\'","\"").replace("\n","")
+    data = data.replace("$TITLE$",title).replace("$ICON$",icon)
 
     # payload["properties"] = json.loads(data)
     payload = json.loads(data)
@@ -69,16 +65,12 @@ def create_db(db_properties):
     response = requests.post(url, json=payload, headers=headers)
     return json.loads(response.text)
 
-def add_db_page(db_id, page_data):
+def curl_db_page(db_id, page_data):
     pp = pprint.PrettyPrinter(indent=4)
 
     url = "https://api.notion.com/v1/pages"
-    headers = {
-        "Accept": "application/json",
-        "Notion-Version": "2022-02-22",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer secret_jPLqKNJD68cdmhlSRKKDTDt7Yr0wzaqZUiDd4pbT650"
-    }
+
+    global headers
 
     data = """
     {
