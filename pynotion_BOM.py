@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import os
-from yattag import Doc
 from datetime import datetime
 from datetime import date
 import shutil
@@ -46,6 +45,13 @@ class pynotion:
         self.DIR_GIT_BOM = os.path.join(self.SUB_DIR_GIT, 'BOM')
         self.DIR_GIT_BOM_IMG = os.path.join(self.DIR_GIT_BOM, 'IMG')
         self.DIR_GIT_SHOPPING_LIST = os.path.join(self.SUB_DIR_GIT, 'SHOPPING_LISTS')
+
+        os.makedirs(self.SUB_DIR_GIT,exist_ok=True)
+        os.makedirs(self.DIR_GIT_STP,exist_ok=True)
+        os.makedirs(self.DIR_GIT_PDF,exist_ok=True)
+        os.makedirs(self.DIR_GIT_BOM,exist_ok=True)
+        os.makedirs(self.DIR_GIT_SHOPPING_LIST,exist_ok=True)
+        os.makedirs(os.path.join(self.DIR_GIT_BOM,"IMG"),exist_ok=True)
 
         self.main()
 
@@ -94,6 +100,22 @@ class pynotion:
         print(response)
         return response
 
+    def dumpBOMimages(self,df, bom_path):
+        pxl_doc = openpyxl.load_workbook(bom_path)
+        sheet = pxl_doc['Sheet1']
+        image_loader = SheetImageLoader(sheet)
+
+        image_partNo = {}
+        img_maxwidth = 0
+
+        for i,r in df["PartNo"].items():
+
+            if (image_loader.image_in(('A'+str(i+2)))):
+                image = image_loader.get(('A'+str(i+2)))
+                # image_partNo[r] = image
+                img_path = os.path.join(self.DIR_GIT_BOM,"IMG",r+'.jpg')
+                image.convert('RGB').save(img_path)
+
     def create_BOM_db(self,df, **kwargs):
         # df = df.drop('column_name', 1)
         headings = df.columns.values
@@ -113,7 +135,7 @@ class pynotion:
         df = df.fillna("")
         for i,r in df.iterrows():
             page_data = {}
-            img_url = self.GIT_URL+"/MVP_02/BOM/IMG/"+r["PartNo"]+".jpg"
+            img_url = self.GIT_URL+"/"+self.SUB_DIR+"/BOM/IMG/"+r["PartNo"]+".jpg"
             for j,h in enumerate(headings):
                 # img_url = ''
                 if h == "PartNo":

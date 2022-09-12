@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import os
-from yattag import Doc
 from datetime import datetime
 from datetime import date
 import shutil

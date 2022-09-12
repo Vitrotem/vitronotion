@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import os
-from yattag import Doc
 from datetime import datetime
 from datetime import date
 import shutil
@@ -38,7 +37,7 @@ def curl_db(db_properties,title,icon):
     {
         "parent": {
             "type": "page_id",
-            "page_id": "05e0f0969ab4403d8ce5ff361eb27b8b"
+            "page_id": "b724b1100c4a44088cc731b29511603f"
         },
         "icon": {
         	"type": "emoji",
